@@ -6,10 +6,14 @@ import Projects from './components/Projects.jsx'
 import Experience from './components/Experience.jsx'
 import Contact from './components/Contact.jsx'
 import Footer from './components/Footer.jsx'
+import AmbientBackground from './components/AmbientBackground.jsx'
+import CursorGlow from './components/CursorGlow.jsx'
 
 function App() {
   return (
     <>
+      <AmbientBackground />
+      <CursorGlow />
       <LineNav />
       <main>
         <Hero />
