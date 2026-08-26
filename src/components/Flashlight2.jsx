@@ -29,15 +29,15 @@ export default function Flashlight() {
 
       const navH = 64
       // 光束先出现在导航位置
-      beam.style.transition = 'opacity 0.4s ease'
-      beam.style.top = `${navH - 24}px`
+      beam.style.transition = 'opacity 0.45s ease'
+      beam.style.top = `${navH - 40}px`
       beam.style.opacity = '1'
 
       // 跟随模块位置掉落（滚动期间模块上移，光束随之"掉"到模块顶部）
       let settled = 0
       const tick = () => {
         const rect = el.getBoundingClientRect()
-        beam.style.top = `${Math.max(navH - 24, rect.top - 10)}px`
+        beam.style.top = `${Math.max(navH - 40, rect.top - 12)}px`
         if (rect.top <= 120 && rect.top >= 30) {
           settled += 1
           if (settled > 10) {
@@ -46,8 +46,8 @@ export default function Flashlight() {
             timers.push(
               setTimeout(() => {
                 beam.style.opacity = '0'
-                timers.push(setTimeout(clearLit, 2600))
-              }, 1300),
+                timers.push(setTimeout(clearLit, 3400))
+              }, 1600),
             )
             return
           }
@@ -58,13 +58,13 @@ export default function Flashlight() {
       }
       raf = requestAnimationFrame(tick)
 
-      // 安全兜底：3.5 秒后强制结束
+      // 安全兜底：4.5 秒后强制结束
       timers.push(
         setTimeout(() => {
           cancelAnimationFrame(raf)
           beam.style.opacity = '0'
-          timers.push(setTimeout(clearLit, 2600))
-        }, 3500),
+          timers.push(setTimeout(clearLit, 3400))
+        }, 4500),
       )
     }
 
