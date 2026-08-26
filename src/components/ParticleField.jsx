@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-// 液态粒子场：粒子缓慢漂浮，靠近鼠标时被吸引并形成微漩涡，
-// 相邻粒子之间出现半透明连线 —— 整体克制、不繁杂
+// 液态粒子场（增强版）：粒子更大更亮、鼠标强吸引漩涡、粒子拖尾、
+// 光标划过泛起涟漪环 —— 液态反馈清晰可见，整体仍保持克制
 export default function ParticleField() {
   const canvasRef = useRef(null)
 
@@ -20,14 +20,18 @@ export default function ParticleField() {
     }
 
     const COLORS = ['99, 102, 241', '34, 211, 238', '168, 85, 247']
-    const R = 170 // 鼠标影响半径
-    const LINK = 130 // 粒子连线距离
+    const R = 210 // 鼠标影响半径
+    const LINK = 150 // 粒子连线距离
+    const TRAIL = 8 // 拖尾长度
 
     let w = 0
     let h = 0
     let raf = 0
     let particles = []
+    const rings = []
     const mouse = { x: -9999, y: -9999, active: false }
+    let lastRingX = -9999
+    let lastRingY = -9999
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -38,16 +42,17 @@ export default function ParticleField() {
       canvas.style.width = `${w}px`
       canvas.style.height = `${h}px`
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      // 粒子数量随屏幕大小变化，保持克制
-      const count = Math.max(28, Math.min(64, Math.floor((w * h) / 24000)))
+      // 粒子数量随屏幕大小自适应
+      const count = Math.max(48, Math.min(110, Math.floor((w * h) / 15000)))
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        r: 1 + Math.random() * 1.6,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        r: 1.5 + Math.random() * 2.2,
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
         near: false,
+        trail: [],
       }))
     }
 
@@ -55,6 +60,12 @@ export default function ParticleField() {
       mouse.x = e.clientX
       mouse.y = e.clientY
       mouse.active = true
+      // 鼠标移动足够距离时泛起涟漪
+      if (Math.hypot(mouse.x - lastRingX, mouse.y - lastRingY) > 26) {
+        rings.push({ x: mouse.x, y: mouse.y, r: 0, max: 130 })
+        lastRingX = mouse.x
+        lastRingY = mouse.y
+      }
     }
 
     const onLeave = () => {
@@ -64,12 +75,12 @@ export default function ParticleField() {
     const step = () => {
       ctx.clearRect(0, 0, w, h)
 
-      // 更新粒子：布朗漂移 + 鼠标液态扰动
+      // 更新粒子：布朗漂移 + 鼠标强吸引漩涡
       for (const p of particles) {
-        p.vx += (Math.random() - 0.5) * 0.06
-        p.vy += (Math.random() - 0.5) * 0.06
-        p.vx *= 0.95
-        p.vy *= 0.95
+        p.vx += (Math.random() - 0.5) * 0.07
+        p.vy += (Math.random() - 0.5) * 0.07
+        p.vx *= 0.94
+        p.vy *= 0.94
 
         p.near = false
         if (mouse.active) {
@@ -78,24 +89,46 @@ export default function ParticleField() {
           const d = Math.hypot(dx, dy)
           if (d < R && d > 0.01) {
             p.near = true
-            const f = (1 - d / R) * 0.055
-            // 径向吸引（水被手指聚拢）
-            p.vx += (dx / d) * f * 1.5
-            p.vy += (dy / d) * f * 1.5
+            const f = (1 - d / R) * 0.1
+            // 径向吸引（聚拢）
+            p.vx += (dx / d) * f * 1.7
+            p.vy += (dy / d) * f * 1.7
             // 切向环绕（液态漩涡）
-            p.vx += (-dy / d) * f * 0.9
-            p.vy += (dx / d) * f * 0.9
+            p.vx += (-dy / d) * f * 1.15
+            p.vy += (dx / d) * f * 1.15
           }
         }
 
         p.x += p.vx
         p.y += p.vy
 
+        // 记录拖尾
+        p.trail.push({ x: p.x, y: p.y })
+        if (p.trail.length > TRAIL) p.trail.shift()
+
         // 边界回绕
         if (p.x < -30) p.x = w + 30
         else if (p.x > w + 30) p.x = -30
         if (p.y < -30) p.y = h + 30
         else if (p.y > h + 30) p.y = -30
+      }
+
+      // 拖尾（液态彗星尾巴：靠近粒子最亮，向尾端渐隐）
+      ctx.lineCap = 'round'
+      for (const p of particles) {
+        const len = p.trail.length
+        if (len < 2) continue
+        for (let k = 1; k < len; k += 1) {
+          const fade = 1 - k / len
+          const a = p.trail[len - k - 1]
+          const b = p.trail[len - k]
+          ctx.strokeStyle = `rgba(${p.color}, ${fade * (p.near ? 0.5 : 0.28)})`
+          ctx.lineWidth = Math.max(0.4, p.r * fade * (p.near ? 1.3 : 0.9))
+          ctx.beginPath()
+          ctx.moveTo(a.x, a.y)
+          ctx.lineTo(b.x, b.y)
+          ctx.stroke()
+        }
       }
 
       // 液态网格连线
@@ -108,11 +141,10 @@ export default function ParticleField() {
           const d = Math.hypot(dx, dy)
           if (d < LINK) {
             const t = 1 - d / LINK
-            let alpha = t * 0.14
-            // 鼠标附近的连线更亮，形成液态聚合感
-            if (a.near || b.near) alpha = Math.max(alpha, t * 0.32)
+            let alpha = t * 0.24
+            if (a.near || b.near) alpha = Math.max(alpha, t * 0.55)
             ctx.strokeStyle = `rgba(148, 163, 249, ${alpha})`
-            ctx.lineWidth = 1
+            ctx.lineWidth = 1.2
             ctx.beginPath()
             ctx.moveTo(a.x, a.y)
             ctx.lineTo(b.x, b.y)
@@ -121,11 +153,27 @@ export default function ParticleField() {
         }
       }
 
-      // 绘制粒子
-      for (const p of particles) {
-        ctx.fillStyle = `rgba(${p.color}, ${p.near ? 0.8 : 0.4})`
+      // 涟漪环（液态水面波纹）
+      for (let i = rings.length - 1; i >= 0; i -= 1) {
+        const ring = rings[i]
+        ring.r += 3.2
+        const t = 1 - ring.r / ring.max
+        if (t <= 0) {
+          rings.splice(i, 1)
+          continue
+        }
+        ctx.strokeStyle = `rgba(34, 211, 238, ${t * 0.4})`
+        ctx.lineWidth = 1.6
         ctx.beginPath()
-        ctx.arc(p.x, p.y, p.near ? p.r + 0.8 : p.r, 0, Math.PI * 2)
+        ctx.arc(ring.x, ring.y, ring.r, 0, Math.PI * 2)
+        ctx.stroke()
+      }
+
+      // 粒子
+      for (const p of particles) {
+        ctx.fillStyle = `rgba(${p.color}, ${p.near ? 0.95 : 0.55})`
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.near ? p.r + 1.2 : p.r, 0, Math.PI * 2)
         ctx.fill()
       }
 
