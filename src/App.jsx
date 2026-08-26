@@ -1,4 +1,4 @@
-import Navbar from './components/Navbar.jsx'
+import SideNav from './components/SideNav.jsx'
 import Hero from './components/Hero.jsx'
 import About from './components/About.jsx'
 import Skills from './components/Skills.jsx'
@@ -16,7 +16,7 @@ function App() {
       <Aurora />
       <ParticleField />
       <CursorGlow />
-      <Navbar />
+      <SideNav />
       <main>
         <Hero />
         <About />
