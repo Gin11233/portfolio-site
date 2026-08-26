@@ -8,11 +8,13 @@ import Contact from './components/Contact.jsx'
 import Footer from './components/Footer.jsx'
 import Aurora from './components/Aurora.jsx'
 import CursorGlow from './components/CursorGlow.jsx'
+import ParticleField from './components/ParticleField.jsx'
 
 function App() {
   return (
     <>
       <Aurora />
+      <ParticleField />
       <CursorGlow />
       <Navbar />
       <main>
