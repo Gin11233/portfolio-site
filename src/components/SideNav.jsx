@@ -12,13 +12,12 @@ const NAV_ICONS = {
   '#contact': '✉️',
 }
 
-// 左侧弧形导航：点击手柄，弧形导航与状态栏一同滑出
+// 左侧弧形导航（始终展开 · 显眼）
 export default function SideNav() {
-  const [open, setOpen] = useState(false)
   const [progress, setProgress] = useState(0)
   const [active, setActive] = useState('#home')
   const [pos, setPos] = useState([])
-  const [panelH, setPanelH] = useState(520)
+  const [panelH, setPanelH] = useState(typeof window !== 'undefined' ? window.innerHeight : 800)
 
   const nav = siteData.nav
   const activeLabel = (nav.find((n) => n.href === active) || nav[0]).label
@@ -53,21 +52,22 @@ export default function SideNav() {
     return () => observer.disconnect()
   }, [nav])
 
-  // 计算链接沿弧线的位置
+  // 计算链接沿弧线的位置（小屏退化为竖排图标条）
   useEffect(() => {
     const compute = () => {
       const vh = window.innerHeight
-      const h = Math.min(520, Math.round(vh * 0.8))
-      setPanelH(h)
-      const top = 44
-      const statusH = 196
-      const usable = h - top - statusH
-      const depth = Math.min(96, Math.round(usable * 0.24))
+      setPanelH(vh)
+      const small = window.innerWidth < 960
+      const top = small ? 92 : 112
+      const statusH = small ? 0 : 208
+      const bottomPad = small ? 28 : 0
+      const usable = Math.max(140, vh - top - statusH - bottomPad)
+      const depth = small ? 0 : Math.min(96, Math.round(usable * 0.24))
       const n = nav.length
       const list = nav.map((_, i) => {
         const t = n === 1 ? 0.5 : i / (n - 1)
         return {
-          left: Math.round(12 + Math.sin(t * Math.PI) * depth),
+          left: Math.round((small ? 7 : 12) + Math.sin(t * Math.PI) * depth),
           top: Math.round(top + t * usable),
         }
       })
@@ -79,47 +79,27 @@ export default function SideNav() {
   }, [nav])
 
   // 弧线轨迹路径
-  const arcPath = `M 18 30 C ${110 + panelH * 0.28} ${panelH * 0.28}, ${110 + panelH * 0.28} ${panelH * 0.72}, 18 ${panelH - 34}`
+  const arcPath = `M 18 36 C ${118 + panelH * 0.28} ${panelH * 0.3}, ${118 + panelH * 0.28} ${panelH * 0.7}, 18 ${panelH - 36}`
 
   return (
     <>
       <div className="scroll-progress" style={{ width: `${progress}%` }} aria-hidden="true" />
-      <div
-        className={`sidenav__backdrop ${open ? 'sidenav__backdrop--show' : ''}`}
-        onClick={() => setOpen(false)}
-        aria-hidden="true"
-      />
       <div className="sidenav">
-        <button
-          className={`sidenav__handle ${open ? 'sidenav__handle--open' : ''}`}
-          aria-label={open ? '关闭菜单' : '打开菜单'}
-          onClick={() => setOpen((v) => !v)}
-        >
-          {open ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
-              <path d="M6 6l12 12M18 6L6 18" />
-            </svg>
-          ) : (
-            <svg width="22" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true">
-              <path d="M3 5h18M3 12h18M3 19h18" />
-            </svg>
-          )}
-        </button>
+        <aside className="sidenav__panel">
+          <a className="sidenav__brand" href="#home">
+            <span className="sidenav__brand-logo">{siteData.hero.name.slice(0, 1)}</span>
+            <span className="sidenav__brand-name">{siteData.hero.name}</span>
+          </a>
 
-        <aside
-          className={`sidenav__panel ${open ? 'sidenav__panel--open' : ''}`}
-          style={{ '--panel-h': `${panelH}px` }}
-          aria-hidden={!open}
-        >
           <svg className="sidenav__arc" viewBox={`0 0 300 ${panelH}`} fill="none" aria-hidden="true">
             <defs>
               <linearGradient id="arcGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#6366f1" stopOpacity="0.7" />
-                <stop offset="55%" stopColor="#22d3ee" stopOpacity="0.45" />
-                <stop offset="100%" stopColor="#a855f7" stopOpacity="0.55" />
+                <stop offset="0%" stopColor="#6366f1" stopOpacity="0.8" />
+                <stop offset="55%" stopColor="#22d3ee" stopOpacity="0.55" />
+                <stop offset="100%" stopColor="#a855f7" stopOpacity="0.65" />
               </linearGradient>
             </defs>
-            <path d={arcPath} stroke="url(#arcGrad)" strokeWidth="1.6" strokeLinecap="round" />
+            <path d={arcPath} stroke="url(#arcGrad)" strokeWidth="1.8" strokeLinecap="round" />
           </svg>
 
           <nav className="sidenav__links">
@@ -127,13 +107,8 @@ export default function SideNav() {
               <a
                 key={item.href}
                 className={`sidenav__link ${active === item.href ? 'sidenav__link--active' : ''}`}
-                style={{
-                  left: pos[i]?.left,
-                  top: pos[i]?.top,
-                  transitionDelay: `${i * 55 + 140}ms`,
-                }}
+                style={{ left: pos[i]?.left, top: pos[i]?.top }}
                 href={item.href}
-                onClick={() => setOpen(false)}
               >
                 <span className="sidenav__link-dot">
                   <span className="sidenav__link-icon">{NAV_ICONS[item.href] ?? '•'}</span>
