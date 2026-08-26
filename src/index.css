@@ -21,7 +21,7 @@
   --radius-sm: 12px;
   --max-width: 1120px;
   --nav-h: 72px;
-  --sidenav-w: 64px;
+  --sidenav-w: 150px;
   --font: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC',
     system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
@@ -93,8 +93,7 @@ img {
 }
 
 .section--alt {
-  background: linear-gradient(180deg, transparent, rgba(99, 102, 241, 0.045) 25%, rgba(14, 165, 233, 0.04) 75%, transparent);
-  border-block: 1px solid rgba(30, 41, 82, 0.07);
+  border-block: 1px solid rgba(30, 41, 82, 0.06);
 }
 
 .section__title {
@@ -131,7 +130,7 @@ img {
   font-size: 16px;
 }
 
-/* 内容区为左侧线条导航让位 */
+/* 内容区为左侧导航让位 */
 main,
 .footer {
   margin-left: var(--sidenav-w);
@@ -172,127 +171,7 @@ main,
 }
 
 /* ============================================================
-   背景：淡彩极光光斑
-   ============================================================ */
-
-.aurora {
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.aurora__blob {
-  position: absolute;
-  border-radius: 42% 58% 63% 37% / 45% 45% 55% 55%;
-  filter: blur(72px);
-  opacity: 0.4;
-  will-change: transform, border-radius;
-}
-
-.aurora__blob--1 {
-  width: 46vw;
-  height: 46vw;
-  top: -12vw;
-  left: -8vw;
-  background: radial-gradient(circle at 35% 35%, rgba(99, 102, 241, 0.55), transparent 65%);
-  animation: blobMorph 26s ease-in-out infinite, blobDrift1 34s ease-in-out infinite alternate;
-}
-
-.aurora__blob--2 {
-  width: 40vw;
-  height: 40vw;
-  top: 22vh;
-  right: -10vw;
-  background: radial-gradient(circle at 60% 40%, rgba(14, 165, 233, 0.5), transparent 65%);
-  animation: blobMorph 32s ease-in-out infinite reverse, blobDrift2 42s ease-in-out infinite alternate;
-}
-
-.aurora__blob--3 {
-  width: 38vw;
-  height: 38vw;
-  bottom: -14vw;
-  left: 18vw;
-  background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.45), transparent 65%);
-  animation: blobMorph 29s ease-in-out infinite 2s, blobDrift3 38s ease-in-out infinite alternate;
-}
-
-.aurora__blob--4 {
-  width: 30vw;
-  height: 30vw;
-  top: 45vh;
-  left: 30vw;
-  background: radial-gradient(circle at 45% 55%, rgba(236, 72, 153, 0.35), transparent 60%);
-  opacity: 0.3;
-  animation: blobMorph 36s ease-in-out infinite 4s, blobDrift1 46s ease-in-out infinite alternate-reverse;
-}
-
-@keyframes blobMorph {
-  0%, 100% {
-    border-radius: 42% 58% 63% 37% / 45% 45% 55% 55%;
-  }
-  25% {
-    border-radius: 60% 40% 38% 62% / 55% 60% 40% 45%;
-  }
-  50% {
-    border-radius: 38% 62% 56% 44% / 48% 42% 58% 52%;
-  }
-  75% {
-    border-radius: 55% 45% 42% 58% / 40% 55% 45% 60%;
-  }
-}
-
-@keyframes blobDrift1 {
-  from { transform: translate(0, 0) scale(1); }
-  to { transform: translate(14vw, 10vh) scale(1.18); }
-}
-
-@keyframes blobDrift2 {
-  from { transform: translate(0, 0) scale(1.1); }
-  to { transform: translate(-12vw, 14vh) scale(0.92); }
-}
-
-@keyframes blobDrift3 {
-  from { transform: translate(0, 0) scale(0.95); }
-  to { transform: translate(10vw, -12vh) scale(1.15); }
-}
-
-/* ============================================================
-   粒子背景
-   ============================================================ */
-
-.particle-field {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* ============================================================
-   光标光晕（淡色柔和）
-   ============================================================ */
-
-.cursor-glow {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 520px;
-  height: 520px;
-  margin: -260px 0 0 -260px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.16), rgba(14, 165, 233, 0.07) 40%, transparent 65%);
-  mix-blend-mode: normal;
-  pointer-events: none;
-  z-index: 0;
-  transform: translate3d(-50vw, -50vh, 0);
-  will-change: transform;
-}
-
-/* ============================================================
-   左侧线条导航（极简：弧线轨道 + 圆点）
+   左侧导航（每个板块一个按钮）
    ============================================================ */
 
 .line-nav {
@@ -302,134 +181,89 @@ main,
   bottom: 0;
   width: var(--sidenav-w);
   z-index: 120;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 20px 14px;
   pointer-events: none;
 }
 
 /* 品牌小方块 */
 .line-nav__brand {
-  position: absolute;
-  left: 12px;
-  top: 18px;
-  width: 40px;
-  height: 40px;
-  border-radius: 13px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   background: var(--gradient);
   color: #fff;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.32);
   pointer-events: auto;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  margin-bottom: 6px;
 }
 
 .line-nav__brand:hover {
   transform: translateY(-2px) rotate(-4deg);
-  box-shadow: 0 10px 26px rgba(99, 102, 241, 0.45);
+  box-shadow: 0 10px 26px rgba(99, 102, 241, 0.42);
 }
 
-/* 弧线轨道 */
-.line-nav__arc {
-  position: absolute;
-  left: 6px;
-  top: 78px;
-  width: 52px;
-  height: calc(100% - 150px);
-  pointer-events: none;
-  opacity: 0.55;
-}
-
-/* 导航圆点 */
+/* 导航按钮 */
 .line-nav__link {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  pointer-events: auto;
-}
-
-.line-nav__dot {
-  position: absolute;
-  left: 3px;
-  top: 3px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--text-dim);
-  border: 2px solid var(--bg);
-  box-shadow: 0 0 0 1px rgba(30, 41, 82, 0.18);
-  transition: background 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-  cursor: pointer;
-}
-
-.line-nav__link:hover .line-nav__dot,
-.line-nav__link--active .line-nav__dot {
-  background: var(--gradient);
-  transform: scale(1.45);
-  box-shadow: 0 0 12px rgba(99, 102, 241, 0.55);
-}
-
-.line-nav__link--active .line-nav__dot {
-  animation: dotPulseNav 2.2s ease-in-out infinite;
-}
-
-@keyframes dotPulseNav {
-  0%, 100% { box-shadow: 0 0 8px rgba(99, 102, 241, 0.45); }
-  50% { box-shadow: 0 0 16px rgba(99, 102, 241, 0.75); }
-}
-
-/* 悬停/当前板块的标签 */
-.line-nav__label {
-  position: absolute;
-  left: 24px;
-  top: -8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 14px;
   background: var(--glass-bg);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
-  box-shadow: inset 0 1px 0 var(--glass-hi), 0 6px 18px rgba(30, 41, 82, 0.1);
-  padding: 4px 12px;
-  border-radius: 999px;
+  box-shadow: inset 0 1px 0 var(--glass-hi);
+  color: var(--text-dim);
+  font-size: 14.5px;
+  font-weight: 600;
+  pointer-events: auto;
   white-space: nowrap;
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.25s ease 0.06s, transform 0.25s ease 0.06s;
-  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.line-nav__link:hover .line-nav__label,
-.line-nav__link--active .line-nav__label {
-  opacity: 1;
-  transform: translateX(0);
+.line-nav__icon {
+  font-size: 16px;
+  line-height: 1;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.line-nav__link--active .line-nav__label {
+.line-nav__link:hover {
+  transform: translateX(4px);
   color: var(--accent);
   border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: inset 0 1px 0 var(--glass-hi), 0 8px 20px rgba(99, 102, 241, 0.14);
 }
 
-/* 右侧细进度线 */
-.line-nav__progress {
-  position: absolute;
-  left: 17px;
-  top: 80px;
-  bottom: 28px;
-  width: 2px;
-  border-radius: 2px;
-  background: rgba(30, 41, 82, 0.1);
-  overflow: hidden;
+.line-nav__link:hover .line-nav__icon {
+  transform: scale(1.15) rotate(-6deg);
 }
 
-.line-nav__progress span {
-  display: block;
-  width: 100%;
-  border-radius: 2px;
-  background: var(--gradient);
-  transition: height 0.2s ease;
+/* 当前板块：渐变高亮 */
+.line-nav__link--active {
+  background: linear-gradient(120deg, rgba(99, 102, 241, 0.92), rgba(14, 165, 233, 0.88));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 10px 24px rgba(99, 102, 241, 0.32);
+}
+
+.line-nav__link--active .line-nav__icon {
+  transform: scale(1.1);
+}
+
+.line-nav__link--active:hover {
+  transform: translateX(4px);
+  color: #fff;
 }
 
 /* 顶部滚动进度条 */
@@ -777,7 +611,7 @@ main,
 .hero__scroll {
   position: absolute;
   bottom: 26px;
-  left: calc(50% + var(--sidenav-w) / 2);
+  left: 50%;
   transform: translateX(-50%);
   width: 26px;
   height: 44px;
@@ -1396,28 +1230,29 @@ a.contact-card:hover {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .cursor-glow {
-    display: none;
+  /* 窄屏：导航按钮只保留图标 */
+  :root {
+    --sidenav-w: 56px;
   }
 
   .line-nav {
-    width: 56px;
+    padding: 18px 8px;
+    gap: 6px;
   }
 
   .line-nav__brand {
-    left: 8px;
+    width: 40px;
+    height: 40px;
+    margin-inline: auto;
   }
 
-  .line-nav__arc {
-    left: 3px;
+  .line-nav__link {
+    justify-content: center;
+    padding: 11px 0;
   }
 
-  .line-nav__progress {
-    left: 14px;
-  }
-
-  :root {
-    --sidenav-w: 56px;
+  .line-nav__label {
+    display: none;
   }
 }
 
@@ -1436,10 +1271,6 @@ a.contact-card:hover {
 
   .section__subtitle {
     margin-bottom: 36px;
-  }
-
-  .line-nav__label {
-    display: none;
   }
 }
 
@@ -1468,7 +1299,6 @@ a.contact-card:hover {
 }
 
 @media (hover: none) {
-  .cursor-glow,
   .tilt__glare {
     display: none;
   }
