@@ -20,11 +20,11 @@ export default function Contact() {
                 <span className="contact-card__label">邮箱</span>
                 <span className="contact-card__value">{contact.email}</span>
               </a>
-              <div className="contact-card glass">
-                <span className="contact-card__icon">{ICONS.wechat}</span>
-                <span className="contact-card__label">微信</span>
-                <span className="contact-card__value">{contact.wechat}</span>
-              </div>
+              <a className="contact-card glass" href={`tel:${contact.phone}`}>
+                <span className="contact-card__icon">📞</span>
+                <span className="contact-card__label">电话</span>
+                <span className="contact-card__value">{contact.phone}</span>
+              </a>
               <div className="contact-card glass">
                 <span className="contact-card__icon">📍</span>
                 <span className="contact-card__label">坐标</span>
