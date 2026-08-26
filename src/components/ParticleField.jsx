@@ -19,7 +19,8 @@ export default function ParticleField() {
       return
     }
 
-    const COLORS = ['99, 102, 241', '34, 211, 238', '168, 85, 247']
+    // 深色粒子（浅色背景上可见）
+    const COLORS = ['79, 70, 229', '2, 132, 199', '126, 34, 206']
     const R = 210 // 鼠标影响半径
     const LINK = 150 // 粒子连线距离
     const TRAIL = 8 // 拖尾长度
@@ -143,7 +144,7 @@ export default function ParticleField() {
             const t = 1 - d / LINK
             let alpha = t * 0.24
             if (a.near || b.near) alpha = Math.max(alpha, t * 0.55)
-            ctx.strokeStyle = `rgba(148, 163, 249, ${alpha})`
+            ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`
             ctx.lineWidth = 1.2
             ctx.beginPath()
             ctx.moveTo(a.x, a.y)
@@ -162,7 +163,7 @@ export default function ParticleField() {
           rings.splice(i, 1)
           continue
         }
-        ctx.strokeStyle = `rgba(34, 211, 238, ${t * 0.4})`
+        ctx.strokeStyle = `rgba(14, 165, 233, ${t * 0.4})`
         ctx.lineWidth = 1.6
         ctx.beginPath()
         ctx.arc(ring.x, ring.y, ring.r, 0, Math.PI * 2)
