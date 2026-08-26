@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react'
 import { siteData } from '../data/site.js'
 
+// 每个导航链接的图标（hover 时会跳动）
+const NAV_ICONS = {
+  '#home': '🏠',
+  '#about': '👤',
+  '#skills': '⚡',
+  '#projects': '🎨',
+  '#experience': '📜',
+  '#contact': '✉️',
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
@@ -45,7 +55,7 @@ export default function Navbar() {
           <div className="navbar__inner">
             <a className="navbar__brand" href="#home">
               <span className="navbar__logo">{siteData.hero.name.slice(0, 1)}</span>
-              <span>{siteData.hero.name}</span>
+              <span className="navbar__brand-name">{siteData.hero.name}</span>
             </a>
 
             <nav className={`navbar__links ${open ? 'navbar__links--open' : ''}`}>
@@ -56,15 +66,18 @@ export default function Navbar() {
                   className={active === item.href ? 'nav-active' : ''}
                   onClick={() => setOpen(false)}
                 >
-                  {item.label}
+                  <span className="nav-icon" aria-hidden="true">
+                    {NAV_ICONS[item.href] ?? '•'}
+                  </span>
+                  <span>{item.label}</span>
                 </a>
               ))}
               <a
-                className="btn btn--primary btn--sm navbar__cta"
+                className="btn btn--primary btn--sm navbar__cta btn--pulse"
                 href={siteData.contact.email ? `mailto:${siteData.contact.email}` : '#contact'}
                 onClick={() => setOpen(false)}
               >
-                联系我
+                联系我 ✉️
               </a>
             </nav>
 
