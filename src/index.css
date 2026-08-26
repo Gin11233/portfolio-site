@@ -12,8 +12,8 @@
   --violet: #a855f7;
   --pink: #ec4899;
   --gradient: linear-gradient(120deg, #6366f1, #0ea5e9);
-  /* 液态玻璃（浅色 · 通透磨砂） */
-  --glass-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.22));
+  /* 液态玻璃（浅色 · 极致通透磨砂） */
+  --glass-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.15));
   --glass-border: rgba(30, 41, 82, 0.13);
   --glass-hi: rgba(255, 255, 255, 0.95);
   --shadow: 0 20px 50px rgba(30, 41, 82, 0.1);
@@ -39,12 +39,30 @@ html {
 body {
   margin: 0;
   font-family: var(--font);
-  background: var(--bg);
+  /* 背景：淡彩光斑（柔和、克制） */
+  background:
+    radial-gradient(circle at 88% 12%, rgba(14, 165, 233, 0.16), transparent 46%),
+    radial-gradient(circle at 8% 82%, rgba(168, 85, 247, 0.12), transparent 46%),
+    radial-gradient(circle at 45% 45%, rgba(99, 102, 241, 0.08), transparent 55%),
+    radial-gradient(circle at 70% 90%, rgba(236, 72, 153, 0.07), transparent 40%),
+    var(--bg);
+  background-attachment: fixed;
   color: var(--text);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
+}
+
+/* 极淡工程点阵网格 */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(rgba(30, 41, 82, 0.06) 1px, transparent 1.5px);
+  background-size: 26px 26px;
+  pointer-events: none;
 }
 
 ::selection {
@@ -179,16 +197,16 @@ main,
   padding: 56px 44px;
   border-radius: 28px;
   background:
-    radial-gradient(120% 90% at 12% -10%, rgba(255, 255, 255, 0.42), transparent 50%),
-    radial-gradient(90% 70% at 100% 110%, rgba(99, 102, 241, 0.04), transparent 55%),
-    linear-gradient(150deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.08));
+    radial-gradient(120% 90% at 12% -10%, rgba(255, 255, 255, 0.3), transparent 50%),
+    radial-gradient(90% 70% at 100% 110%, rgba(99, 102, 241, 0.03), transparent 55%),
+    linear-gradient(150deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.03));
   -webkit-backdrop-filter: blur(28px) saturate(1.6);
   backdrop-filter: blur(28px) saturate(1.6);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow:
-    0 24px 60px rgba(30, 41, 82, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    inset 0 -1px 0 rgba(99, 102, 241, 0.05);
+    0 24px 60px rgba(30, 41, 82, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(99, 102, 241, 0.04);
   overflow: hidden;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
 }
@@ -201,8 +219,8 @@ main,
   border-radius: inherit;
   background:
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E"),
-    radial-gradient(80% 45% at 20% -8%, rgba(255, 255, 255, 0.4), transparent 55%),
-    radial-gradient(60% 30% at 85% -5%, rgba(14, 165, 233, 0.06), transparent 60%);
+    radial-gradient(80% 45% at 20% -8%, rgba(255, 255, 255, 0.3), transparent 55%),
+    radial-gradient(60% 30% at 85% -5%, rgba(14, 165, 233, 0.05), transparent 60%);
   pointer-events: none;
 }
 
