@@ -14,7 +14,7 @@ export default function Skills() {
         <div className="skills__grid">
           {skills.map((group, i) => (
             <Reveal key={group.category} delay={i * 80}>
-              <div className="skill-card">
+              <div className="skill-card glass">
                 <h3 className="skill-card__title">{group.category}</h3>
                 <div className="skill-card__items">
                   {group.items.map((item) => (

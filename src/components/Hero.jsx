@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { siteData } from '../data/site.js'
+import Magnetic from './Magnetic.jsx'
 
 export default function Hero() {
   const { hero } = siteData
@@ -25,20 +26,30 @@ export default function Hero() {
           </div>
           <p className="hero__tagline">{hero.tagline}</p>
           <div className="hero__actions">
-            <a className="btn btn--primary" href={hero.ctaPrimary.href}>
-              {hero.ctaPrimary.label}
-            </a>
-            <a className="btn btn--ghost" href={hero.ctaSecondary.href}>
-              {hero.ctaSecondary.label}
-            </a>
+            <Magnetic strength={0.25}>
+              <a className="btn btn--primary" href={hero.ctaPrimary.href}>
+                {hero.ctaPrimary.label}
+              </a>
+            </Magnetic>
+            <Magnetic strength={0.25}>
+              <a className="btn btn--ghost" href={hero.ctaSecondary.href}>
+                {hero.ctaSecondary.label}
+              </a>
+            </Magnetic>
           </div>
         </div>
 
         <div className="hero__media">
           <div className="hero__avatar-wrap">
-            <img className="hero__avatar" src={hero.avatar} alt={hero.name} />
-            <div className="hero__orbit hero__orbit--1" />
-            <div className="hero__orbit hero__orbit--2" />
+            {/* 液态形变光球 */}
+            <div className="hero__blob" aria-hidden="true" />
+            {/* 旋转光环 */}
+            <div className="hero__orbit" aria-hidden="true" />
+            <div className="hero__orbit hero__orbit--2" aria-hidden="true" />
+            {/* 玻璃罩 + 头像 */}
+            <div className="hero__glass">
+              <img className="hero__avatar" src={hero.avatar} alt={hero.name} />
+            </div>
             <span className="hero__badge hero__badge--code">&lt;/&gt;</span>
             <span className="hero__badge hero__badge--spark">✨</span>
           </div>

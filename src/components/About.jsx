@@ -21,7 +21,7 @@ export default function About() {
           <div className="about__highlights">
             {about.highlights.map((h, i) => (
               <Reveal key={h.label} delay={i * 90}>
-                <div className="highlight-card">
+                <div className="highlight-card glass">
                   <span className="highlight-card__icon">{h.icon}</span>
                   <div>
                     <h3>{h.label}</h3>

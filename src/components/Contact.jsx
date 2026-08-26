@@ -46,17 +46,17 @@ export default function Contact() {
 
         <Reveal delay={80}>
           <div className="contact__cards">
-            <a className="contact-card" href={`mailto:${contact.email}`}>
+            <a className="contact-card glass" href={`mailto:${contact.email}`}>
               <span className="contact-card__icon">{ICONS.email}</span>
               <span className="contact-card__label">邮箱</span>
               <span className="contact-card__value">{contact.email}</span>
             </a>
-            <div className="contact-card">
+            <div className="contact-card glass">
               <span className="contact-card__icon">{ICONS.wechat}</span>
               <span className="contact-card__label">微信</span>
               <span className="contact-card__value">{contact.wechat}</span>
             </div>
-            <div className="contact-card">
+            <div className="contact-card glass">
               <span className="contact-card__icon">📍</span>
               <span className="contact-card__label">坐标</span>
               <span className="contact-card__value">{contact.location}</span>
@@ -69,7 +69,7 @@ export default function Contact() {
             {contact.socials.map((s) => (
               <a
                 key={s.label}
-                className="social-btn"
+                className="social-btn glass"
                 href={s.url}
                 target="_blank"
                 rel="noreferrer"

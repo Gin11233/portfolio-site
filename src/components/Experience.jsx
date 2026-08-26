@@ -16,7 +16,7 @@ export default function Experience() {
             <Reveal key={`${item.period}-${item.role}`} delay={i * 90}>
               <div className="timeline__item">
                 <div className="timeline__dot" />
-                <div className="timeline__card">
+                <div className="timeline__card glass">
                   <span className="timeline__period">{item.period}</span>
                   <h3>
                     {item.role} <span className="timeline__company">@ {item.company}</span>
