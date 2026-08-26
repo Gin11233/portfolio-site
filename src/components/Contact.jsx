@@ -1,0 +1,87 @@
+import { siteData } from '../data/site.js'
+import Reveal from './Reveal.jsx'
+
+const ICONS = {
+  github: (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+      <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.17-.02-2.12-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.34.95.1-.74.4-1.25.72-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 2.89-.39c.98 0 1.97.13 2.89.39 2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.7 5.4-5.26 5.68.41.35.77 1.05.77 2.12 0 1.53-.01 2.76-.01 3.14 0 .3.2.66.8.55A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" />
+    </svg>
+  ),
+  blog: (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+      <path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Zm8 1.5V8h4.5L14 3.5ZM8 12h8v-1.5H8V12Zm0 3.5h8V14H8v1.5Zm0 3.5h5V17H8v2Z" />
+    </svg>
+  ),
+  zhihu: (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+      <path d="M5.72 18.7c-.25.34-.55.62-.88.85-.33.22-.65.4-.98.52l-.52-1.27c.28-.12.55-.27.8-.47.25-.19.47-.4.66-.64l.92-1.47V9.5H3.5V8h4.63v1.42H6.15v7.3l-.43.98Zm4.2-.34h2.74l.02 1.16h3.04V18.36h2.6v1.1h3.05v-2.2H20.9l-2.32-7.92H15.4L12.9 19.7l-2.98.02v-1.36Zm3.38-1.4 2.09-7.6h.16l1.84 7.6h-4.09Zm6.8 1.4V9.5h-2.9V8h6.83v1.5H21v8.96h-1.1Z" />
+    </svg>
+  ),
+  email: (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+      <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4.24-8 5.01-8-5.01V6l8 5 8-5v2.24Z" />
+    </svg>
+  ),
+  wechat: (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+      <path d="M9.5 4C5.36 4 2 6.91 2 10.5c0 2.06 1.05 3.9 2.7 5.1l-.65 2.4 2.55-1.3c.83.28 1.72.44 2.65.48a6.05 6.05 0 0 1-.25-1.73c0-3.58 3.36-6.45 7.5-6.45.35 0 .69.02 1.03.06C16.83 6.5 13.46 4 9.5 4Zm-2.7 3.6a.95.95 0 1 1 0 1.9.95.95 0 0 1 0-1.9Zm5.9 0a.95.95 0 1 1 0 1.9.95.95 0 0 1 0-1.9ZM22 15.1c0-2.94-2.91-5.3-6.5-5.3S9 12.16 9 15.1s2.91 5.3 6.5 5.3c.66 0 1.3-.09 1.9-.25l2.03 1.05-.52-1.92c1.27-.94 2.09-2.33 2.09-3.88Zm-8.9-.55a.76.76 0 1 1 0-1.52.76.76 0 0 1 0 1.52Zm4.8 0a.76.76 0 1 1 0-1.52.76.76 0 0 1 0 1.52Z" />
+    </svg>
+  ),
+  twitter: (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+      <path d="M18.9 2H22l-6.77 7.74L23.25 22h-6.23l-4.88-6.38L6.5 22H3.38l7.24-8.28L2.75 2h6.39l4.41 5.83L18.9 2Zm-1.09 18.13h1.73L7.44 3.76H5.58l12.23 16.37Z" />
+    </svg>
+  ),
+}
+
+export default function Contact() {
+  const { contact } = siteData
+  return (
+    <section id="contact" className="section">
+      <div className="container container--narrow">
+        <Reveal>
+          <h2 className="section__title">{contact.heading}</h2>
+          <p className="section__subtitle">{contact.lead}</p>
+        </Reveal>
+
+        <Reveal delay={80}>
+          <div className="contact__cards">
+            <a className="contact-card" href={`mailto:${contact.email}`}>
+              <span className="contact-card__icon">{ICONS.email}</span>
+              <span className="contact-card__label">邮箱</span>
+              <span className="contact-card__value">{contact.email}</span>
+            </a>
+            <div className="contact-card">
+              <span className="contact-card__icon">{ICONS.wechat}</span>
+              <span className="contact-card__label">微信</span>
+              <span className="contact-card__value">{contact.wechat}</span>
+            </div>
+            <div className="contact-card">
+              <span className="contact-card__icon">📍</span>
+              <span className="contact-card__label">坐标</span>
+              <span className="contact-card__value">{contact.location}</span>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={140}>
+          <div className="contact__socials">
+            {contact.socials.map((s) => (
+              <a
+                key={s.label}
+                className="social-btn"
+                href={s.url}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={s.label}
+              >
+                {ICONS[s.icon] ?? ICONS.blog}
+                <span>{s.label}</span>
+              </a>
+            ))}
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
