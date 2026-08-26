@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react'
 
-// 背景光斑配置：颜色 / 尺寸 / 位置 / 视差深度 / 透明度
+// 背景光斑配置：颜色 / 尺寸 / 位置 / 视差深度 / 透明度（暗色版）
 const BLOBS = [
-  { color: '108, 92, 231', alpha: 0.4, size: '44vw', top: '-10vw', right: '-6vw', depth: 0.5, dur: 28, delay: 0 },
-  { color: '0, 0, 0', alpha: 0.05, size: '36vw', bottom: '-12vw', left: '12vw', depth: 0.8, dur: 34, delay: 2 },
-  { color: '138, 92, 246', alpha: 0.32, size: '30vw', top: '22vh', left: '-8vw', depth: 0.6, dur: 30, delay: 4 },
-  { color: '0, 0, 0', alpha: 0.045, size: '22vw', top: '50vh', left: '34vw', depth: 0.35, dur: 36, delay: 6 },
+  { color: '108, 92, 231', alpha: 0.5, size: '44vw', top: '-10vw', right: '-6vw', depth: 0.5, dur: 28, delay: 0 },
+  { color: '255, 255, 255', alpha: 0.03, size: '36vw', bottom: '-12vw', left: '12vw', depth: 0.8, dur: 34, delay: 2 },
+  { color: '167, 139, 250', alpha: 0.38, size: '30vw', top: '22vh', left: '-8vw', depth: 0.6, dur: 30, delay: 4 },
+  { color: '255, 255, 255', alpha: 0.025, size: '22vw', top: '50vh', left: '34vw', depth: 0.35, dur: 36, delay: 6 },
 ]
 
 // 背景光斑：缓慢流动 + 鼠标视差（不同深度跟随光标）

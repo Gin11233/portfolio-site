@@ -8,12 +8,14 @@ import Contact from './components/Contact.jsx'
 import Footer from './components/Footer.jsx'
 import AmbientBackground from './components/AmbientBackground.jsx'
 import CursorGlow from './components/CursorGlow.jsx'
+import Flashlight2 from './components/Flashlight2.jsx'
 
 function App() {
   return (
     <>
       <AmbientBackground />
       <CursorGlow />
+      <Flashlight2 />
       <Navbar />
       <main>
         <Hero />

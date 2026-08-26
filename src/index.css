@@ -1,20 +1,19 @@
 /* ============================================================
-   作品集网站 —— Moonshot 风格（黑白极简 · 大圆角 · 品牌紫）
+   作品集网站 —— 暗夜玻璃 · 手电筒导航
    ============================================================ */
 
 :root {
-  --bg: #ffffff;
-  --bg-soft: #f7f7f8;
-  --text: #1f1f1f;
-  --text-dim: #6d6d6d;
-  --accent: #6c5ce7;
-  --accent-2: #8a5cf6;
-  --gradient: linear-gradient(120deg, #6c5ce7, #8a5cf6);
-  --border: #e8e8ea;
-  --border-strong: #d4d4d8;
-  --card-bg: #ffffff;
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-  --shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+  --bg: #060608;
+  --bg-soft: #0d0d13;
+  --text: #f2f3f7;
+  --text-dim: #9aa0b5;
+  --accent: #8b7cf8;
+  --accent-2: #a78bfa;
+  --gradient: linear-gradient(120deg, #6c5ce7, #a78bfa);
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.2);
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --shadow: 0 16px 48px rgba(0, 0, 0, 0.55);
   --radius: 24px;
   --radius-sm: 14px;
   --max-width: 1120px;
@@ -45,8 +44,8 @@ body {
 }
 
 ::selection {
-  background: rgba(108, 92, 231, 0.18);
-  color: #1f1f1f;
+  background: rgba(139, 124, 248, 0.4);
+  color: #fff;
 }
 
 h1,
@@ -91,7 +90,7 @@ img {
 }
 
 .section--alt {
-  border-block: 1px solid #f0f0f1;
+  border-block: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .section__title {
@@ -110,33 +109,119 @@ img {
   font-size: 16.5px;
 }
 
+/* ============================================================
+   透明玻璃模块（暗夜玻璃）
+   ============================================================ */
+
 .glass {
   position: relative;
-  background: var(--card-bg);
+  background: rgba(255, 255, 255, 0.055);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease;
 }
 
-/* 内容模块卡片 */
 .glass-module {
   position: relative;
   padding: 60px 48px;
-  background: var(--card-bg);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border);
   border-radius: 28px;
-  box-shadow: var(--shadow-sm);
+  -webkit-backdrop-filter: blur(26px) saturate(1.4);
+  backdrop-filter: blur(26px) saturate(1.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(139, 124, 248, 0.05),
+    0 16px 48px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
+/* 玻璃顶部弧光 */
+.glass-module::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(80% 40% at 20% -6%, rgba(255, 255, 255, 0.1), transparent 55%),
+    radial-gradient(50% 30% at 90% -4%, rgba(139, 124, 248, 0.12), transparent 60%);
+  pointer-events: none;
+}
+
 .glass-module:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow);
   border-color: var(--border-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(139, 124, 248, 0.08),
+    0 24px 60px rgba(0, 0, 0, 0.55);
+}
+
+/* 被手电筒照亮的模块 */
+.module-lit {
+  box-shadow:
+    0 0 70px rgba(255, 255, 255, 0.22),
+    0 0 150px rgba(255, 255, 255, 0.1),
+    inset 0 0 60px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.module-lit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(70% 60% at 50% -5%, rgba(255, 255, 255, 0.3), transparent 70%);
+  animation: moduleLitFade 2.8s ease forwards;
+}
+
+@keyframes moduleLitFade {
+  0% { opacity: 0; }
+  12% { opacity: 1; }
+  65% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
 /* ============================================================
-   背景：淡灰紫光斑（视差）+ 极淡点阵
+   手电筒光束（白光 · 很小）
+   ============================================================ */
+
+.flash-beam {
+  position: fixed;
+  left: 50%;
+  top: -300px;
+  width: 44px;
+  height: 170px;
+  transform: translateX(-50%);
+  z-index: 130;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.13) 40%, transparent 85%);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+  will-change: top, opacity;
+  transition: opacity 0.5s ease;
+}
+
+.flash-beam__tip {
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow:
+    0 0 10px 3px rgba(255, 255, 255, 0.85),
+    0 0 28px 10px rgba(255, 255, 255, 0.35);
+}
+
+/* ============================================================
+   背景：暗色光斑（视差）+ 极淡点阵
    ============================================================ */
 
 body::after {
@@ -144,7 +229,7 @@ body::after {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background-image: radial-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1.5px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1.5px);
   background-size: 28px 28px;
   pointer-events: none;
 }
@@ -161,7 +246,7 @@ body::after {
   position: absolute;
   border-radius: 42% 58% 63% 37% / 45% 45% 55% 55%;
   filter: blur(80px);
-  opacity: 0.75;
+  opacity: 0.7;
   will-change: translate, border-radius;
   animation: ambientMorph 30s ease-in-out infinite alternate, ambientDrift 40s ease-in-out infinite alternate;
 }
@@ -189,7 +274,7 @@ body::after {
   height: 420px;
   margin: -210px 0 0 -210px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(108, 92, 231, 0.1), rgba(138, 92, 246, 0.04) 42%, transparent 68%);
+  background: radial-gradient(circle, rgba(139, 124, 248, 0.13), rgba(138, 92, 246, 0.05) 42%, transparent 68%);
   pointer-events: none;
   z-index: 0;
   transform: translate3d(-50vw, -50vh, 0);
@@ -197,7 +282,7 @@ body::after {
 }
 
 /* ============================================================
-   顶部导航（Moonshot：Logo + 菜单 + CTA）
+   顶部导航（暗夜玻璃）
    ============================================================ */
 
 .navbar {
@@ -209,12 +294,11 @@ body::after {
   transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
 }
 
-/* 滚动后：白底毛玻璃吸顶 */
 .navbar--scrolled {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(6, 6, 10, 0.8);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
-  box-shadow: 0 1px 0 #f0f0f1, 0 8px 30px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.07), 0 8px 30px rgba(0, 0, 0, 0.45);
 }
 
 .navbar__inner {
@@ -232,6 +316,7 @@ body::after {
   font-weight: 800;
   font-size: 18px;
   letter-spacing: -0.01em;
+  color: var(--text);
 }
 
 .navbar__logo {
@@ -245,7 +330,7 @@ body::after {
   color: #fff;
   font-size: 17px;
   font-weight: 800;
-  box-shadow: 0 6px 16px rgba(108, 92, 231, 0.25);
+  box-shadow: 0 6px 16px rgba(108, 92, 231, 0.4);
 }
 
 .navbar__links {
@@ -255,7 +340,7 @@ body::after {
 }
 
 .navbar__links a:not(.btn) {
-  color: var(--text);
+  color: var(--text-dim);
   font-size: 15px;
   font-weight: 500;
   position: relative;
@@ -264,12 +349,11 @@ body::after {
 }
 
 .navbar__links a:not(.btn):hover {
-  color: var(--accent);
+  color: var(--text);
 }
 
-/* 当前板块：紫渐变下划线 */
 .navbar__links a:not(.btn).nav-active {
-  color: var(--accent);
+  color: #fff;
   font-weight: 600;
 }
 
@@ -289,7 +373,6 @@ body::after {
   margin-left: 8px;
 }
 
-/* 汉堡按钮 */
 .navbar__burger {
   display: none;
   flex-direction: column;
@@ -298,7 +381,7 @@ body::after {
   width: 42px;
   height: 42px;
   padding: 10px;
-  background: var(--card-bg);
+  background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--border);
   border-radius: 12px;
   cursor: pointer;
@@ -329,7 +412,7 @@ body::after {
 }
 
 /* ============================================================
-   按钮（Moonshot：紫底主按钮 + 细边次按钮）
+   按钮
    ============================================================ */
 
 .btn {
@@ -350,23 +433,25 @@ body::after {
 .btn--primary {
   background: var(--gradient);
   color: #fff;
-  box-shadow: 0 10px 26px rgba(108, 92, 231, 0.3);
+  box-shadow: 0 10px 26px rgba(108, 92, 231, 0.4);
 }
 
 .btn--primary:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 14px 34px rgba(108, 92, 231, 0.42);
+  box-shadow: 0 14px 34px rgba(108, 92, 231, 0.55);
 }
 
 .btn--ghost {
-  background: var(--card-bg);
+  background: rgba(255, 255, 255, 0.06);
   color: var(--text);
   border: 1px solid var(--border-strong);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 }
 
 .btn--ghost:hover {
   border-color: var(--accent);
-  color: var(--accent);
+  color: #fff;
   transform: translateY(-2px) scale(1.02);
 }
 
@@ -402,7 +487,7 @@ body::after {
 }
 
 .hero__greeting {
-  color: var(--accent);
+  color: var(--accent-2);
   font-weight: 600;
   font-size: 17px;
   margin-bottom: 10px;
@@ -425,14 +510,14 @@ body::after {
   to { width: 34px; }
 }
 
-/* Moonshot 式大标题：纯黑超粗 */
 .hero__name {
   font-size: clamp(48px, 7.5vw, 84px);
   font-weight: 900;
   letter-spacing: -0.04em;
   line-height: 1.05;
   margin-bottom: 18px;
-  color: #111111;
+  color: #ffffff;
+  text-shadow: 0 0 60px rgba(139, 124, 248, 0.35);
 }
 
 .hero__role {
@@ -445,7 +530,7 @@ body::after {
 .hero__role-text {
   font-size: clamp(20px, 3vw, 28px);
   font-weight: 700;
-  color: var(--accent);
+  color: var(--accent-2);
   letter-spacing: -0.01em;
   animation: roleIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -485,12 +570,11 @@ body::after {
   aspect-ratio: 1;
 }
 
-/* 头像后的柔和紫光晕 */
 .hero__blob {
   position: absolute;
   inset: 4%;
   border-radius: 46% 54% 58% 42% / 52% 44% 56% 48%;
-  background: linear-gradient(135deg, rgba(108, 92, 231, 0.55), rgba(138, 92, 246, 0.45), rgba(167, 139, 250, 0.5));
+  background: linear-gradient(135deg, rgba(108, 92, 231, 0.6), rgba(138, 92, 246, 0.5), rgba(167, 139, 250, 0.55));
   filter: blur(2px);
   animation: blobMorph 12s ease-in-out infinite, blobSpin 24s linear infinite;
   z-index: 0;
@@ -532,18 +616,18 @@ body::after {
   to { transform: rotate(360deg); }
 }
 
-/* 白色玻璃罩 */
 .hero__glass {
   position: absolute;
   inset: 4px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.82);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  backdrop-filter: blur(16px) saturate(1.4);
   border: 1px solid var(--border);
   box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.1),
-    inset 0 2px 6px rgba(255, 255, 255, 0.95);
+    0 24px 60px rgba(0, 0, 0, 0.5),
+    inset 0 2px 6px rgba(255, 255, 255, 0.15),
+    inset 0 -14px 30px rgba(108, 92, 231, 0.15);
   overflow: hidden;
   z-index: 1;
   animation: float 6s ease-in-out infinite;
@@ -554,7 +638,9 @@ body::after {
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: radial-gradient(60% 40% at 28% 18%, rgba(255, 255, 255, 0.9), transparent 60%);
+  background:
+    radial-gradient(60% 40% at 28% 18%, rgba(255, 255, 255, 0.22), transparent 60%),
+    radial-gradient(50% 30% at 75% 80%, rgba(139, 124, 248, 0.18), transparent 60%);
   pointer-events: none;
 }
 
@@ -566,7 +652,6 @@ body::after {
   z-index: 1;
 }
 
-/* 漂浮徽章 */
 .hero__badge {
   position: absolute;
   display: inline-flex;
@@ -577,9 +662,11 @@ body::after {
   border-radius: 999px;
   font-size: 14px;
   font-weight: 700;
-  background: var(--card-bg);
+  background: rgba(255, 255, 255, 0.07);
   border: 1px solid var(--border);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
   z-index: 3;
   animation: float 5s ease-in-out infinite;
 }
@@ -588,7 +675,7 @@ body::after {
   top: 4%;
   right: -2%;
   font-family: var(--mono);
-  color: var(--accent);
+  color: var(--accent-2);
 }
 
 .hero__badge--spark {
@@ -615,14 +702,15 @@ body::after {
   display: flex;
   justify-content: center;
   padding-top: 9px;
-  background: var(--card-bg);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .hero__scroll-dot {
   width: 4px;
   height: 8px;
   border-radius: 4px;
-  background: var(--accent);
+  background: var(--accent-2);
+  box-shadow: 0 0 10px rgba(139, 124, 248, 0.8);
   animation: scrollDot 1.6s ease-in-out infinite;
 }
 
@@ -666,7 +754,7 @@ body::after {
 .highlight-card:hover {
   transform: translateY(-4px);
   border-color: var(--border-strong);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 .highlight-card__icon {
@@ -709,7 +797,7 @@ body::after {
 .skill-card:hover {
   transform: translateY(-5px);
   border-color: var(--border-strong);
-  box-shadow: var(--shadow);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
 }
 
 .skill-card__title {
@@ -727,6 +815,7 @@ body::after {
   height: 8px;
   border-radius: 50%;
   background: var(--gradient);
+  box-shadow: 0 0 10px rgba(139, 124, 248, 0.8);
 }
 
 .skill-card__items {
@@ -740,7 +829,7 @@ body::after {
   padding: 5px 13px;
   border-radius: 999px;
   font-size: 13.5px;
-  background: var(--bg-soft);
+  background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--border);
   color: var(--text-dim);
   white-space: nowrap;
@@ -750,9 +839,9 @@ body::after {
 
 .chip:hover {
   transform: translateY(-2px);
-  background: rgba(108, 92, 231, 0.08);
-  border-color: rgba(108, 92, 231, 0.35);
-  color: var(--accent);
+  background: rgba(139, 124, 248, 0.15);
+  border-color: rgba(139, 124, 248, 0.4);
+  color: #fff;
 }
 
 .chip--sm {
@@ -792,7 +881,7 @@ body::after {
   z-index: 5;
   opacity: 0;
   transition: opacity 0.3s ease;
-  background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.75), transparent 45%);
+  background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.12), transparent 45%);
 }
 
 .tilt:hover .tilt__glare {
@@ -810,7 +899,7 @@ body::after {
 
 .project-card:hover {
   border-color: var(--border-strong);
-  box-shadow: var(--shadow);
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.55);
 }
 
 .project-card__cover {
@@ -826,7 +915,7 @@ body::after {
 .project-card__emoji {
   position: relative;
   font-size: 56px;
-  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.18));
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.5));
   transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 1;
 }
@@ -838,7 +927,7 @@ body::after {
 .project-card__shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 45%, rgba(255, 255, 255, 0.3));
+  background: linear-gradient(180deg, transparent 45%, rgba(6, 6, 10, 0.4));
   z-index: 1;
 }
 
@@ -876,7 +965,7 @@ body::after {
 .link {
   font-size: 14.5px;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--accent-2);
   position: relative;
   transition: opacity 0.2s ease;
 }
@@ -899,7 +988,7 @@ body::after {
 }
 
 .link:hover {
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
 /* ============================================================
@@ -920,7 +1009,7 @@ body::after {
   width: 2px;
   border-radius: 2px;
   background: linear-gradient(180deg, var(--accent), var(--accent-2));
-  opacity: 0.35;
+  opacity: 0.4;
 }
 
 .timeline__item {
@@ -936,8 +1025,8 @@ body::after {
   height: 14px;
   border-radius: 50%;
   background: var(--gradient);
-  border: 3px solid #fff;
-  box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.3);
+  border: 3px solid var(--bg);
+  box-shadow: 0 0 0 2px rgba(139, 124, 248, 0.4), 0 0 14px rgba(139, 124, 248, 0.6);
 }
 
 .timeline__card {
@@ -949,16 +1038,16 @@ body::after {
 .timeline__card:hover {
   transform: translateX(6px);
   border-color: var(--border-strong);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
 }
 
 .timeline__period {
   display: inline-block;
   font-family: var(--mono);
   font-size: 13px;
-  color: var(--accent);
-  background: rgba(108, 92, 231, 0.08);
-  border: 1px solid rgba(108, 92, 231, 0.25);
+  color: var(--accent-2);
+  background: rgba(139, 124, 248, 0.12);
+  border: 1px solid rgba(139, 124, 248, 0.3);
   padding: 2px 12px;
   border-radius: 999px;
   margin-bottom: 10px;
@@ -970,7 +1059,7 @@ body::after {
 }
 
 .timeline__company {
-  color: var(--accent);
+  color: var(--accent-2);
   font-weight: 600;
 }
 
@@ -1010,7 +1099,7 @@ a.contact-card:hover,
 .contact-card:hover {
   transform: translateY(-5px);
   border-color: var(--border-strong);
-  box-shadow: var(--shadow);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
 }
 
 .contact-card__icon {
@@ -1020,15 +1109,15 @@ a.contact-card:hover,
   align-items: center;
   justify-content: center;
   border-radius: 16px;
-  background: rgba(108, 92, 231, 0.08);
-  color: var(--accent);
+  background: rgba(139, 124, 248, 0.14);
+  color: var(--accent-2);
   font-size: 20px;
   transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
 }
 
 .contact-card:hover .contact-card__icon {
   transform: translateY(-4px) scale(1.08);
-  background: rgba(108, 92, 231, 0.16);
+  background: rgba(139, 124, 248, 0.24);
 }
 
 .contact-card__label {
@@ -1066,8 +1155,8 @@ a.contact-card:hover,
 .social-btn:hover {
   transform: translateY(-3px);
   border-color: var(--border-strong);
-  color: var(--accent);
-  box-shadow: var(--shadow-sm);
+  color: #fff;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
 }
 
 /* ============================================================
@@ -1075,10 +1164,10 @@ a.contact-card:hover,
    ============================================================ */
 
 .footer {
-  border-top: 1px solid #f0f0f1;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   padding: 36px 0;
   text-align: center;
-  background: var(--card-bg);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .footer p {
@@ -1093,7 +1182,7 @@ a.contact-card:hover,
 }
 
 .footer__sub a {
-  color: var(--accent);
+  color: var(--accent-2);
 }
 
 /* ============================================================
@@ -1161,7 +1250,6 @@ a.contact-card:hover,
     display: none;
   }
 
-  /* 移动端：汉堡菜单 + 下拉玻璃面板 */
   .navbar__links {
     position: fixed;
     top: calc(var(--nav-h) + 8px);
@@ -1171,7 +1259,7 @@ a.contact-card:hover,
     align-items: stretch;
     gap: 4px;
     padding: 16px;
-    background: rgba(255, 255, 255, 0.96);
+    background: rgba(10, 10, 16, 0.94);
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border: 1px solid var(--border);
@@ -1196,7 +1284,7 @@ a.contact-card:hover,
 
   .navbar__links a:not(.btn):hover,
   .navbar__links a:not(.btn).nav-active {
-    background: rgba(108, 92, 231, 0.08);
+    background: rgba(139, 124, 248, 0.14);
   }
 
   .navbar__links a:not(.btn).nav-active::after {
